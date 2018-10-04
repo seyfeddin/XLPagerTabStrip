@@ -384,6 +384,16 @@
             self.changeCurrentIndexBlock(oldCell, newCell, YES);
         }
     }
+
+    oldCell.label.textColor = [UIColor whiteColor];
+
+    UIViewController<XLPagerTabStripChildItem> * childController =   [self.pagerTabStripChildViewControllers objectAtIndex:indexPath.item];
+
+    if ([childController respondsToSelector:@selector(colorForPagerTabStripViewController:)]) {
+        newCell.label.textColor = [childController colorForPagerTabStripViewController:self];
+    } else {
+        newCell.label.textColor = [UIColor whiteColor];
+    }
     
     [self moveToViewControllerAtIndex:indexPath.item];
 }
@@ -418,6 +428,16 @@
         UIImage *image = [childController highlightedImageForPagerTabStripViewController:self];
         buttonBarCell.imageView.highlightedImage = image;
     }
+
+    if (self.currentIndex == indexPath.item) {
+        if ([childController respondsToSelector:@selector(colorForPagerTabStripViewController:)]) {
+            UIColor *color = [childController colorForPagerTabStripViewController:self];
+            buttonBarCell.label.textColor = color;
+        }
+    } else {
+        buttonBarCell.label.textColor = [UIColor whiteColor];
+    }
+
     
     if (self.isProgressiveIndicator) {
         if (self.changeCurrentIndexProgressiveBlock) {
